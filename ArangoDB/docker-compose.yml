@@ -1,0 +1,16 @@
+version: '3.8' # Specify your desired docker-compose version
+
+services:
+  arangodb:
+    image: arangodb:latest # Use a specific version if needed (e.g., arangodb:3.12.0)
+    environment:
+      ARANGO_ROOT_PASSWORD: your_strong_password # Replace with a strong password
+    ports:
+      - 8529:8529 # Expose ArangoDB port to host
+    volumes:
+      - arangodb_data:/var/lib/arangodb3 # Persistent data volume
+      - arangodb_apps:/var/lib/arangodb3-apps # Persistent apps volume (optional)
+
+volumes:
+  arangodb_data: # Define data volume
+  arangodb_apps: # Define apps volume (optional)
