@@ -1,4 +1,4 @@
-version: '3.7'
+# version: '3.7'
 
 services:
   redis-stack:
@@ -9,7 +9,7 @@ services:
       # - '8001:8001'  # Uncomment if needed
     volumes:
       - redis_data:/data
-    restart: always # Ensure the container restarts automatically on failure
+    restart: always  # Ensure the container restarts automatically on failure
 
 volumes:
   redis_data:
