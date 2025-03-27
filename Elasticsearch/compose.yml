@@ -1,8 +1,7 @@
-version: '2.2'
-
 services:
   setup:
     image: docker.elastic.co/elasticsearch/elasticsearch:${STACK_VERSION}
+    container_name: setup
     volumes:
       - certs:/usr/share/elasticsearch/config/certs
     user: '0'
@@ -67,6 +66,7 @@ services:
       setup:
         condition: service_healthy
     image: docker.elastic.co/elasticsearch/elasticsearch:${STACK_VERSION}
+    container_name: elasticsearch01
     volumes:
       - certs:/usr/share/elasticsearch/config/certs
       - esdata01:/usr/share/elasticsearch/data
@@ -104,11 +104,13 @@ services:
       interval: 10s
       timeout: 10s
       retries: 120
+    restart: always
 
   es02:
     depends_on:
       - es01
     image: docker.elastic.co/elasticsearch/elasticsearch:${STACK_VERSION}
+    container_name: elasticsearch02
     volumes:
       - certs:/usr/share/elasticsearch/config/certs
       - esdata02:/usr/share/elasticsearch/data
@@ -143,11 +145,13 @@ services:
       interval: 10s
       timeout: 10s
       retries: 120
+    restart: always
 
   es03:
     depends_on:
       - es02
     image: docker.elastic.co/elasticsearch/elasticsearch:${STACK_VERSION}
+    container_name: elasticsearch03
     volumes:
       - certs:/usr/share/elasticsearch/config/certs
       - esdata03:/usr/share/elasticsearch/data
@@ -182,6 +186,7 @@ services:
       interval: 10s
       timeout: 10s
       retries: 120
+    restart: always
 
   kibana:
     depends_on:
@@ -192,6 +197,7 @@ services:
       es03:
         condition: service_healthy
     image: docker.elastic.co/kibana/kibana:${STACK_VERSION}
+    container_name: kibana
     volumes:
       - certs:/usr/share/kibana/config/certs
       - kibanadata:/usr/share/kibana/data
@@ -213,6 +219,7 @@ services:
       interval: 10s
       timeout: 10s
       retries: 120
+    restart: always
 
 volumes:
   certs:
