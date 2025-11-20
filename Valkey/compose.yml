@@ -1,0 +1,15 @@
+services:
+  valkey:
+    image: valkey/valkey-bundle:latest # Or specify a specific version like valkey/valkey-bundle:7.2.4
+    ports:
+      - "7000:6379" # Map container port 6379 to host port 7000
+    volumes:
+      - valkey_data:/data # Persist Valkey data to a named volume
+    environment:
+      # Optional: Set a password for Valkey (replace with a strong password)
+      # - VALKEY_PASSWORD=your_secure_password
+      - ALLOW_EMPTY_PASSWORD=yes # For development/testing, allows no password
+    container_name: valkey
+
+volumes:
+  valkey_data: # Define the named volume
