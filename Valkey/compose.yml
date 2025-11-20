@@ -10,6 +10,7 @@ services:
       # - VALKEY_PASSWORD=your_secure_password
       - ALLOW_EMPTY_PASSWORD=yes # For development/testing, allows no password
     container_name: valkey
+    restart: always
 
 volumes:
   valkey_data: # Define the named volume
