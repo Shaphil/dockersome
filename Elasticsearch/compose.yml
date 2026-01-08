@@ -1,79 +1,82 @@
-version: '3.8'
-
 services:
   es01:
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.14.2
+    image: docker.elastic.co/elasticsearch/elasticsearch:9.2.3
     container_name: es01
     environment:
       - node.name=es01
       - cluster.name=es-docker-cluster
-      - discovery.seed_hosts=es02,es03
+      - discovery.seed_hosts=es01,es02,es03 # Simplified: List everyone
       - cluster.initial_master_nodes=es01,es02,es03
       - bootstrap.memory_lock=true
-      - 'ES_JAVA_OPTS=-Xms512m -Xmx2g'
-      - discovery.type=multi-node
+      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+      - xpack.security.enabled=false
     ulimits:
       memlock:
         soft: -1
         hard: -1
     volumes:
-      - esdata01:/usr/share/elasticsearch/data
+      - esdata01:/usr/share/elasticsearch/data # Unique volume
     ports:
       - 9200:9200
     networks:
       - esnet
+    restart: always
 
   es02:
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.14.2
+    image: docker.elastic.co/elasticsearch/elasticsearch:9.2.3
     container_name: es02
     environment:
       - node.name=es02
       - cluster.name=es-docker-cluster
-      - discovery.seed_hosts=es01,es03
+      - discovery.seed_hosts=es01,es02,es03
       - cluster.initial_master_nodes=es01,es02,es03
       - bootstrap.memory_lock=true
-      - 'ES_JAVA_OPTS=-Xms512m -Xmx2g'
-      - discovery.type=multi-node
+      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+      - xpack.security.enabled=false
     ulimits:
       memlock:
         soft: -1
         hard: -1
     volumes:
-      - esdata02:/usr/share/elasticsearch/data
+      - esdata02:/usr/share/elasticsearch/data # Unique volume
+    # No ports needed here unless you want to access node 2 directly from Windows
     networks:
       - esnet
+    restart: always
 
   es03:
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.14.2
+    image: docker.elastic.co/elasticsearch/elasticsearch:9.2.3
     container_name: es03
     environment:
       - node.name=es03
       - cluster.name=es-docker-cluster
-      - discovery.seed_hosts=es01,es02
+      - discovery.seed_hosts=es01,es02,es03
       - cluster.initial_master_nodes=es01,es02,es03
       - bootstrap.memory_lock=true
-      - 'ES_JAVA_OPTS=-Xms512m -Xmx2g'
-      - discovery.type=multi-node
+      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+      - xpack.security.enabled=false
     ulimits:
       memlock:
         soft: -1
         hard: -1
     volumes:
-      - esdata03:/usr/share/elasticsearch/data
+      - esdata03:/usr/share/elasticsearch/data # Unique volume
     networks:
       - esnet
+    restart: always
 
   kibana:
-    image: docker.elastic.co/kibana/kibana:8.14.2
+    image: docker.elastic.co/kibana/kibana:9.2.3
     container_name: kibana
     depends_on:
-      - elasticsearch
+      - es01
     environment:
-      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - ELASTICSEARCH_HOSTS=["http://es01:9200","http://es02:9200","http://es03:9200"]
     ports:
       - 5601:5601
     networks:
       - esnet
+    restart: always
 
 volumes:
   esdata01:
