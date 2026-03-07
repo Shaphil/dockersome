@@ -1,3 +1,5 @@
+# version: '3.7'
+
 services:
   redis-stack:
     image: 'redis/redis-stack-server:latest'
@@ -7,12 +9,7 @@ services:
       # - '8001:8001'  # Uncomment if needed
     volumes:
       - redis_data:/data
-    restart: always
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
+    restart: always  # Ensure the container restarts automatically on failure
 
 volumes:
   redis_data:
