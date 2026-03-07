@@ -1,7 +1,4 @@
-version: '3.1'
-
 services:
-
   db:
     image: postgres
     container_name: postgres
@@ -11,3 +8,10 @@ services:
     environment:
       # User: postgres
       POSTGRES_PASSWORD: bloodyroots
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    # This is how you enable pg_stat_statements via Docker
+    command: postgres -c shared_preload_libraries=pg_stat_statements
+
+volumes:
+  pgdata:
