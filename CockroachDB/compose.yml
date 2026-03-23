@@ -1,0 +1,56 @@
+services:
+  roach1:
+    image: cockroachdb/cockroach:latest
+    ports:
+      - "26257:26257"
+      - "8080:8080"
+    volumes:
+      - roach1-data:/cockroach/data
+    command: start --insecure --join=roach1,roach2,roach3 --advertise-addr=roach1
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health?ready=1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  roach2:
+    image: cockroachdb/cockroach:latest
+    volumes:
+      - roach2-data:/cockroach/data
+    command: start --insecure --join=roach1,roach2,roach3 --advertise-addr=roach2
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health?ready=1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  roach3:
+    image: cockroachdb/cockroach:latest
+    volumes:
+      - roach3-data:/cockroach/data
+    command: start --insecure --join=roach1,roach2,roach3 --advertise-addr=roach3
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health?ready=1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  haproxy:
+    image: haproxy:2.4
+    ports:
+      - "26258:26258"
+      - "8081:8080"
+    volumes:
+      - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
+    depends_on:
+      - roach1
+      - roach2
+      - roach3
+
+volumes:
+  roach1-data:
+  roach2-data:
+  roach3-data:
