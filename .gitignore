@@ -4,3 +4,7 @@
 .idea/**
 .code
 .code/**
+
+### virtual environments
+venv/
+env/

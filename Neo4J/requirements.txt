@@ -1,0 +1,19 @@
+# Core Agent Framework
+langgraph>=0.2.0
+langchain-neo4j>=0.1.0
+
+# LLM Integration
+langchain-openai>=0.3.0
+openai>=1.60.0
+
+# Backend & Data Validation
+fastapi>=0.110.0
+uvicorn>=0.27.0
+pydantic>=2.6.0
+pydantic-settings>=2.1.0
+
+# Database Drivers
+neo4j>=5.18.0
+
+# Environment Management
+python-dotenv>=1.0.1
