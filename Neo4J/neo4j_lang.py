@@ -11,22 +11,17 @@ DB_URI = "bolt://localhost:7687"
 DB_USER = "neo4j"
 DB_PASS = "bloodyroots"
 
+
 # 2. Define State
-
-
 class AgentState(TypedDict):
     messages: Annotated[list, add_messages]
     tenant_id: str
 
+
 # 3. Define a simple ReAct Node
-
-
 def call_model(state: AgentState):
-    # In a real app, the LLM would go here.
-    # We'll simulate a tool response.
-    last_msg = state["messages"][-1].content
-    response = f"Simulated Graph Search for: {last_msg} (Tenant: {state['tenant_id']})"
-    return {"messages": [("assistant", response)]}
+    # This ensures a NEW message is added to the state
+    return {"messages": [("assistant", "I am session 2 and I am now active!")]}
 
 
 # 4. Build the Graph with Persistence
@@ -43,7 +38,7 @@ with Neo4jSaver.from_conn_string(uri=DB_URI, user=DB_USER, password=DB_PASS) as 
     app = builder.compile(checkpointer=checkpointer)
 
     # 5. Test the Execution
-    config = {"configurable": {"thread_id": "test-session-1"}}
+    config = {"configurable": {"thread_id": 'session-2'}}
     input_data = {
         "messages": [("user", "Who is the CEO of Acme Corp?")],
         "tenant_id": "tenant-001"
