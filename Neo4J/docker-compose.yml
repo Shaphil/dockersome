@@ -13,10 +13,10 @@ services:
       - NEO4J_server_memory_pagecache_size=${NEO4J_server_memory_pagecache_size}
       - NEO4J_server_memory_heap_max__size=${NEO4J_server_memory_heap_max__size}
     volumes:
-      - ${NEO4J_HOME_DATA}/data:/data
-      - ${NEO4J_HOME_DATA}/logs:/logs
-      - ${NEO4J_HOME_DATA}/import:/import
-      - ${NEO4J_HOME_DATA}/plugins:/plugins
+      - ${NEO4J_HOME_DATA:-./neo4j_storage}/data:/data
+      - ${NEO4J_HOME_DATA:-./neo4j_storage}/logs:/logs
+      - ${NEO4J_HOME_DATA:-./neo4j_storage}/import:/import
+      - ${NEO4J_HOME_DATA:-./neo4j_storage}/plugins:/plugins
     healthcheck:
       test:
         [
