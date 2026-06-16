@@ -17,7 +17,9 @@ services:
       # User: postgres
       POSTGRES_PASSWORD: bloodyroots
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      # In PostgreSQL 18, the image expects your volume to be mapped directly to the root path
+      # `/var/lib/postgresql` instead of `/var/lib/postgresql/data`
+      - pgdata:/var/lib/postgresql
     # This is how you enable pg_stat_statements via Docker
     command: postgres -c shared_preload_libraries=pg_stat_statements
 
