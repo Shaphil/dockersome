@@ -1,0 +1,16 @@
+services:
+  clickhouse:
+    image: clickhouse/clickhouse-server:latest
+    container_name: clickhouse-server
+    user: "101:101"
+    ports:
+      - "8123:8123" # HTTP interface
+      - "9000:9000" # Native TCP client
+    volumes:
+      - ./ch_data:/var/lib/clickhouse
+      - ./ch_logs:/var/log/clickhouse-server
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
+    restart: always
