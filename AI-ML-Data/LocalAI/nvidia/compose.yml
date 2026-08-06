@@ -1,0 +1,20 @@
+services:
+  localai:
+    image: localai/localai:latest-gpu-nvidia-cuda-12
+    container_name: local-ai
+    ports:
+      - "8080:8080"
+    environment:
+      - MODELS_PATH=/models
+      - CONTEXT_SIZE=2048
+      - THREADS=4
+    volumes:
+      - ./models:/models:cached
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    restart: always

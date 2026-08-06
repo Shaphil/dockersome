@@ -1,0 +1,13 @@
+services:
+  localai:
+    image: localai/localai:latest-cpu
+    container_name: local-ai
+    ports:
+      - "8080:8080"
+    environment:
+      - MODELS_PATH=/models
+      - CONTEXT_SIZE=2048
+      - THREADS=4
+    volumes:
+      - ./models:/models:cached
+    restart: always
